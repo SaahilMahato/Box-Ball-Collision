@@ -8,20 +8,29 @@
 
 
 class Ball {
-    constructor (x, y, radius, dx, dy, color) {
+    constructor (x, y, radius, dx, dy, color, speed) {
         this.x = x;
         this.y = y;
         this.radius = radius;
-        this.dx = dx;
-        this.dy = dy;
         this.color = color;
+        this.speed = speed;
+        this.dx = dx * this.speed;
+        this.dy = dy * this.speed;
     }
 
-    draw(ctx) {
+    draw = (ctx) => {
         ctx.beginPath();
         ctx.fillStyle = this.color;
         ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
         ctx.fill();
         ctx.closePath();
+    }
+
+    move = (ctx) => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        this.draw(ctx);
+        this.x += this.dx;
+        this.y += this.dy;
+        requestAnimationFrame(() => this.move(ctx));
     }
 }
