@@ -78,17 +78,18 @@ class Ball {
 
     resolveCollision = (otherBall) => {
         // use vector physics to calculate velocity. 
+        // restitution is not physically accurate but it looks a bit realistic
 
-        let vCollision = {x: otherBall.x - this.x, y: otherBall.y - this.y};
-        let distance = Math.sqrt((otherBall.x - this.x)*(otherBall.x - this.x) + (otherBall.y - this.y)*(otherBall.y - this.y));
-        let vCollisionNorm = {x: vCollision.x / distance, y: vCollision.y / distance};
-        let vRelativeVelocity = {x: this.vx - otherBall.vx, y: this.vy - otherBall.vy};
-        let speed = vRelativeVelocity.x * vCollisionNorm.x + vRelativeVelocity.y * vCollisionNorm.y;
-        if (speed < 0) return;
-        let impulse = 2 * speed / (this.mass + otherBall.mass);
-        this.vx -= ((impulse * otherBall.mass * vCollisionNorm.x) * this.restitution);
-        this.vy -= ((impulse * otherBall.mass * vCollisionNorm.y) * this.restitution);
-        otherBall.vx += ((impulse * this.mass * vCollisionNorm.x) * this.restitution);
-        otherBall.vy += ((impulse * this.mass * vCollisionNorm.y) * this.restitution);
+        let vCollision = {x: otherBall.x - this.x, y: otherBall.y - this.y}; // vector of the direction of collision
+        let distance = Math.sqrt((otherBall.x - this.x)*(otherBall.x - this.x) + (otherBall.y - this.y)*(otherBall.y - this.y)); // distance between balls. Need to calculate normal vector
+        let vCollisionNorm = {x: vCollision.x / distance, y: vCollision.y / distance}; // noraml vector. need to calculate relative velocity
+        let vRelativeVelocity = {x: this.vx - otherBall.vx, y: this.vy - otherBall.vy}; // relative velocity. differece between the velocities
+        let speed = vRelativeVelocity.x * vCollisionNorm.x + vRelativeVelocity.y * vCollisionNorm.y; // calucate speed. vector * normal gives scalar quantity
+        if (speed < 0) return; // if speed is less than 0 dont change otherwise it overlaps
+        let impulse = 2 * speed / (this.mass + otherBall.mass); // impulse is the force that produces change in momemtum
+        this.vx -= ((impulse * otherBall.mass * vCollisionNorm.x) * this.restitution); // multpiply collision vector by impulse of the otherball
+        this.vy -= ((impulse * otherBall.mass * vCollisionNorm.y) * this.restitution); // multpiply collision vector by impulse of the otherball
+        otherBall.vx += ((impulse * this.mass * vCollisionNorm.x) * this.restitution); // multpiply collision vector by impulse of the otherball
+        otherBall.vy += ((impulse * this.mass * vCollisionNorm.y) * this.restitution); // multpiply collision vector by impulse of the otherball
     }
 }
