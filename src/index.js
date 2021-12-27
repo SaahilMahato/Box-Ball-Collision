@@ -13,6 +13,7 @@ const possible_directions = [-1, 1];
 let x, y, radius, dx, dy, color, speed;
 
 for (let i=0; i<BALL_COUNT; i++) {
+    
     radius = getRandomIntInclusive(5, 15);
     x = getRandomIntInclusive(0+radius, canvas.width-radius);
     y = getRandomIntInclusive(0+radius, canvas.height-radius);
