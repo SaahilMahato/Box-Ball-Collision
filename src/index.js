@@ -8,43 +8,42 @@ canvas.style.border = 'solid 2px';
 const ctx = canvas.getContext('2d');
 
 // user controlled parameters 
-const ball_count = 1000;
-const min_radius = 5;
-const max_radius = 10;
-const min_speed = 1;
-const max_speed = 3;
+const ballCount = 1000;
+const minRadius = 5;
+const maxRadius = 10;
+const minSpeed = 1;
+const maxSpeed = 3;
 
 // variables needed to create balls
 const balls = [];
-const possible_directions = [-1, 1];
+const possibleDirections = [-1, 1];
 let x, y, dx, dy, color, radius, speed;
 
 // create the balls
-for (let i=0; i<ball_count; i++) {
-    radius = getRandomIntInclusive(min_radius, max_radius);
+for (let i=0; i<ballCount; i++) {
+    radius = getRandomIntInclusive(minRadius, maxRadius);
     x = getRandomIntInclusive(0+radius, canvas.width-radius);
     y = getRandomIntInclusive(0+radius, canvas.height-radius);
     color = getRandomColor();
-    dx = possible_directions[getRandomIntInclusive(0, possible_directions.length - 1)];
-    dy = possible_directions[getRandomIntInclusive(0, possible_directions.length - 1)];
-    speed = getRandomIntInclusive(min_speed, max_speed);
-
-    balls.push(new Ball(x, y, radius, dx, dy, color, speed));
+    dx = possibleDirections[getRandomIntInclusive(0, possibleDirections.length - 1)];
+    dy = possibleDirections[getRandomIntInclusive(0, possibleDirections.length - 1)];
+    speed = getRandomIntInclusive(minSpeed, maxSpeed);
+    balls.push(new Ball(x, y, radius, dx, dy, color, speed, ctx));
 }
 
 // game loop
 const gameLoop = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for(let i=0; i<balls.length; i++) {
-        balls[i].draw(ctx);
+        balls[i].draw();
         for (let j=i+1; j<balls.length; j++) {
             if (balls[i].checkBallCollision(balls[j])) {
-                balls[i].resolveCollision(balls[j]);
+                balls[i].resolveBallCollision(balls[j]);
                 balls[i].move();
                 balls[j].move();
             }
         }
-        balls[i].resolveBoxCollision(ctx);
+        balls[i].resolveBoxCollision();
         balls[i].move();
     }
     requestAnimationFrame(gameLoop);
