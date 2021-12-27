@@ -35,16 +35,14 @@ for (let i=0; i<ballCount; i++) {
 const gameLoop = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for(let i=0; i<balls.length; i++) {
+        balls[i].move();
         balls[i].draw();
         for (let j=i+1; j<balls.length; j++) {
             if (balls[i].checkBallCollision(balls[j])) {
                 balls[i].resolveBallCollision(balls[j]);
-                balls[i].move();
-                balls[j].move();
             }
         }
         balls[i].resolveBoxCollision();
-        balls[i].move();
     }
     requestAnimationFrame(gameLoop);
 }
